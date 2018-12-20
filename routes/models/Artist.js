@@ -49,6 +49,10 @@ var artistSchema = mongoose.Schema({
     },
     favArtistID: {
       type: String
-    }
+    },
+    user:[{
+      type: Schema.Types.ObjectId,
+      ref:'users'
+    }]
 });
-module.exports = ArtistModel = mongoose.model('artists', artistSchema);
+module.exports = Artist = mongoose.model('artists', artistSchema);

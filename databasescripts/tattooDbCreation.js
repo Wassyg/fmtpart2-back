@@ -83,16 +83,14 @@ function tattooDBCreation() {
   return new Promise(async function(resolve, reject) {
     //Creation of database with local files
     const TattooDBBichon = await tattooDBCreationWithLocalImages('../public/images/tatouagesBichon/', 'Bichon');
-    const TattooDBPrincess = await tattooDBCreationWithLocalImages('../public/images/tatouagesPrincess/', 'Princess Madness');
-    let TattooDB = TattooDBBichon.concat(TattooDBPrincess);
+    const TattooDBPrincessM = await tattooDBCreationWithLocalImages('../public/images/tatouagesPrincessM/', 'Princess Madness');
+    let TattooDB = TattooDBBichon.concat(TattooDBPrincessM);
     // Creation of database with web files from SCRAPING
     //tattooDBScrapping(tattooLink, TattooDB);
     console.log(TattooDB);
     resolve (TattooDB)
   });
 }
-
- //tattooDBCreation();
 
 
 
@@ -113,7 +111,7 @@ function pushTattooPhotoOnCloudinary(tattoo, tattooIndex) {
 
 function addArtistInfoToTattoo(tattoo, artistNickname) {
   return new Promise((resolve, reject) => {
-    ArtistModel.findOne(
+    Artist.findOne(
       {artistNickname : artistNickname},
       function (err, artist) {
         tattoo.artistID = artist._id;
@@ -126,7 +124,7 @@ function addArtistInfoToTattoo(tattoo, artistNickname) {
 
 function createNewTattooInDB(tattoo){
   return new Promise((resolve, reject) => {
-    let newTattoo = new TattooModel (tattoo);
+    let newTattoo = new Tattoo (tattoo);
     newTattoo.save(
      (error, tattoo) => {
         console.log(tattoo);
@@ -149,4 +147,6 @@ async function tattooDBEnrichment() {
   })
 }
 
-//tattooDBEnrichment();
+////// TO LAUNCH THE CREATION OF DATABASE : UNCOMMENT THE LINE BELOW /////
+//vérifier sir vraiment besoin de tattooDBCreation() avant !
+// tattooDBEnrichment();

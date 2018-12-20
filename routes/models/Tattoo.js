@@ -8,15 +8,17 @@ var tattooSchema = mongoose.Schema({
       type: String,
       required:true
     },
-    tattooStyleList: [{
-      type: String
-    }],
+    tattooStyleList: [],
     artistID: {
       type: String,
       required:true
     },
     favTattooID: {
       type: String
-    }
+    },
+    user:[{
+      type: Schema.Types.ObjectId,
+      ref:'users'
+    }]
 });
-module.exports = TattooModel = mongoose.model('tattoos', tattooSchema);
+module.exports = Tattoo = mongoose.model('tattoos', tattooSchema);

@@ -19,28 +19,21 @@ var userSchema = mongoose.Schema({
       required: true
     },
     userTelephone : {
-      type: String,
-      required: true
+      type: String
     },
     userTattooDescription: {
-      type: String,
-      required: true
+      type: String
     },
     userAvailability : {
-      type: String,
-      required: true
+      type: String
     },
     userFavoriteTattoo : [{
-      favTattoos: {
         type: Schema.Types.ObjectId,
         ref:'tattoos'
-      }
     }],
     userFavoriteArtist : [{
-      favArtists: {
         type: Schema.Types.ObjectId,
         ref:'artists'
-      }
     }]
 });
-module.exports = UserModel = mongoose.model('users', userSchema);
+module.exports = User = mongoose.model('users', userSchema);

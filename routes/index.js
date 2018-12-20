@@ -18,9 +18,9 @@ mongoose.connect('mongodb://'+dbuser+':'+dbpassword+'@ds039301.mlab.com:39301/fi
 );
 //Load the cloudinary information
 cloudinary.config({
-  cloud_name: "crazycloud",
-  api_key: '255876528863486',
-  api_secret: '0qzSisIetVmja-LecM_n0PiH-CQ'
+  cloud_name: "fulltattooedjacket",
+  api_key: '457899133511257',
+  api_secret: '7YCQsMJ8YUBk1a2-EZHfcD4xV7E'
 });
 
 //load User model, Artist model, Lead model, Tattoo model
@@ -44,28 +44,26 @@ function shuffle(array) {
   return array;
 }
 
-
-//// INITIALISATION OF DATABASES ////
-
-// Artist DB
 var ArtistDB = [
   {
     artistNickname : "Bichon",
     artistCompanyName : "The Golden Rabbit Tattoo",
-    artistAddress: "10 Rue Gambey, 75011 Paris, France, 75011 Paris",
+    artistAddress: "10 Rue Gambey, 75011 Paris",
+    artistDescription: "Après un passage par le graphisme, Bichon s'est créé son propre style : épuré, fluide et élégant.",
     artistEmail: "bichontatoueur@gmail.com",
-    artistComputerPhotoLink : "https://res.cloudinary.com/crazycloud/image/upload/v1542304276/gas3khshphtf0rs3w0oj.jpg",
-    artistStyleList : ["Japonais", "Postmodern"],
-    artistNote : 4.4,
+    artistComputerPhotoLink : "../public/avatarsTatoueurs/bichon.jpg",
+    artistStyleList : ["DotWork", "FineLine", "BlackWork"],
+    artistNote : 5,
     },
  {
    artistNickname : "Princess Madness",
    artistCompanyName : "Lez'art du Corps - Paris",
    artistAddress: "16 Rue Geoffroy-Marie, 75009 Paris",
+   artistDescription: "Princess Madness s'est d'abord lancée dans la mode. Elle aime le style cartoon et les créations déjantées.",
    artistEmail: "princess-madness@hotmail.com",
-   artistComputerPhotoLink : "../FindMyTattooFront/public/avatarsTatoueurs/41450515_1897257143642841_5668628696324374528_n.jpg",
-   artistStyleList : ["Tribal", "OldSchool"],
-   artistNote : 4.6,
+   artistComputerPhotoLink : "../public/avatarsTatoueurs/princessM.jpg",
+   artistStyleList : ["Cartoon", "NewSchool", "Postmodern"],
+   artistNote : 5,
  }
 ];
 
@@ -75,7 +73,7 @@ var ArtistDB = [
 // To learn more on how to convert addresses to coordinates, check this simple website : https://dzone.com/articles/mapboxs-api-to-geocode-data-to-get-location-inform
 
 
-var ArtistDBAddress=ArtistDB.map(a=>a.artistAddress);
+var ArtistDBAddress = ArtistDB.map(a=>a.artistAddress);
 
 // for (var i = 0; i < ArtistDBAddress.length; i++) {
 //   var j=0;
@@ -100,7 +98,7 @@ var ArtistDBAddress=ArtistDB.map(a=>a.artistAddress);
 //   });
 // }
 
-// Tattoo DB
+// Tattoo DB but change the addresses
 // var TattooPhotoDBBichon = fs.readdirSync('../FindMyTattooFront/public/tatouagesBichon/');
 // var TattooPhotoDBPrincesse = fs.readdirSync('../FindMyTattooFront/public/tatouagesPrincess/');
 //
@@ -152,6 +150,7 @@ router.get('/artists', function(req, res) {
     })
 });
 
+
 //Route to enrich the Artist DB in one shot
 // router.post('/artists', function(req, res){
 //
@@ -174,7 +173,7 @@ router.get('/artists', function(req, res) {
 // Route to get all tattoos from specific artist
 router.get('/tattoosfromartist', function(req, res) {
   Tattoo.find(
-    {artistID: req.query.artistID },
+    {artistID: req.query.artistID},
     function (err, tattoos) {
       res.json(shuffle(tattoos));
     }
@@ -193,11 +192,13 @@ router.get('/tattoos', function(req, res) {
 // Route to create new user
 var salt = "$2a$10$rx6.LcM0Eycd3JfZuRVUsO"; //To crypt the user password
 router.post('/signup', function(req, res) {
+    //console.log(req.body);
   User.findOne(
     {userEmail: req.body.userEmail},
     function (err, user) {
+
       if (user) {
-        console.log(user);
+
         res.json({
           signup : false,
           result : "alreadyInDB",
@@ -271,28 +272,51 @@ router.post('/signin', function(req, res) {
 
 // Route to update user favorite tattoos when he likes a tattoo
 router.put('/userliketattoo', function(req, res) {
-  console.log(req.body);
+  console.log("req.body 275",req.body);
   var newFavoriteTattoo = {
     tattooPhotoLink: req.body.favTattooPhotoLink,
     tattooStyleList: [
       req.body.favTattooStyleList1,
       req.body.favTattooStyleList2,
-      req.body.favTattooStyleList3],
+      req.body.favTattooStyleList3
+    ],
     artistID: req.body.favArtistID,
     favTattooID: req.body.favTattooID,
+    user: req.body.user_id
   };
   User.updateOne(
     {_id: req.body.user_id},
     {$addToSet: {userFavoriteTattoo: newFavoriteTattoo}},
     function (err, raw) {
+      console.log("err 291",err);
       if(err){
         res.json({likeTattoo : false})
       } else{
         res.json({likeTattoo: true});
+/////////////////////
+        // Tattoo.updateOne(
+        //   {_id: req.body.favTattooID},
+        //   {$addToSet: {user: req.body.user_id}},
+        //   function (err, raw) {
+        //     if(err){
+        //       res.json({likeTattoo : "not Okay"})
+        //     } else{
+        //       res.json({likeTattoo: true});
+        //     }
+        //   }
+        // )
       }
-    }
-  )
-});
+    });
+})
+
+// router.get('/tattoowithID', function(req, res){
+//   Tattoo.find(
+//     {_id: req.query.tattoo_id},
+//     function(err, resultat){
+//       res.json(resultat);
+//     }
+//   )
+// })
 
 // Route to update a user favorite tattoos when he dislikes a tattoo
 router.put('/userdisliketattoo', function(req, res) {
@@ -354,6 +378,38 @@ router.put('/userdislikeartist', function(req, res) {
     }
   )
 });
+//Route to get fav tattoos and artists for each users
+router.get('/userFavTattoos', function(req,res){
+  Tattoo.find(
+    {user: req.query.user_id},
+    function(err, tattoo){
+      if (err){
+        res.json({user : false})
+      } else {
+        res.json({
+          user : true,
+          result : tattoo
+        });
+      }
+    }
+  )
+})
+router.get('/userFavArtists', function(req,res){
+  Artist.find(
+    {user: req.query.user_id},
+    function(err, artist){
+      if (err){
+        res.json({user : false})
+      } else {
+        res.json({
+          user : true,
+          result : artist
+        });
+      }
+    }
+  )
+})
+
 
 //Route to get all information of a specific user
 router.get('/user', function(req, res) {

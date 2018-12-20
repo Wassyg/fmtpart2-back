@@ -77,7 +77,7 @@ function pushArtistPhotoOnCloudinaryAndSaveItInMLab() {
           if (error) {
             return console.log(error);
           } else {
-            var newArtist = new ArtistModel ({
+            var newArtist = new Artist ({
                artistNickname: artist.artistNickname,
                artistCompanyName: artist.artistCompanyName,
                artistAddress: artist.artistAddress,

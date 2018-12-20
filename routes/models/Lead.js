@@ -11,4 +11,4 @@ var leadSchema = mongoose.Schema({
     userAvailability : String,
     userTattooDescription : String,
 });
-module.exports = LeadModel = mongoose.model('leads', leadSchema);
+module.exports = Lead = mongoose.model('leads', leadSchema);
