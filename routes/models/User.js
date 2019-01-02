@@ -27,13 +27,19 @@ var userSchema = mongoose.Schema({
     userAvailability : {
       type: String
     },
-    userFavoriteTattoo : [{
+    userFavoriteTattoo : [
+    {
+      tattoo: {
         type: Schema.Types.ObjectId,
         ref:'tattoos'
+        }
     }],
-    userFavoriteArtist : [{
+    userFavoriteArtist : [
+      {
+        artist: {
         type: Schema.Types.ObjectId,
         ref:'artists'
+        }
     }],
     avatar: {
     type: String

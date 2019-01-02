@@ -284,39 +284,32 @@ router.put('/userliketattoo', function(req, res) {
     favTattooID: req.body.favTattooID,
     user: req.body.user_id
   };
+  console.log("newFavoriteTattoo 287", newFavoriteTattoo);
   User.updateOne(
     {_id: req.body.user_id},
     {$addToSet: {userFavoriteTattoo: newFavoriteTattoo}},
     function (err, raw) {
-      console.log("err 291",err);
       if(err){
+        console.log("err 292",err);
         res.json({likeTattoo : false})
       } else{
+        console.log("raw 295",raw);
         res.json({likeTattoo: true});
-/////////////////////
-        // Tattoo.updateOne(
-        //   {_id: req.body.favTattooID},
-        //   {$addToSet: {user: req.body.user_id}},
-        //   function (err, raw) {
-        //     if(err){
-        //       res.json({likeTattoo : "not Okay"})
-        //     } else{
-        //       res.json({likeTattoo: true});
-        //     }
-        //   }
-        // )
       }
     });
+    // Tattoo.updateOne(
+    //   {_id: req.body.favTattooID},
+    //   {$addToSet: {user: req.body.user_id}},
+    //   function (err, raw) {
+    //     if(err){
+    //       res.json({addUserToTattoo : false})
+    //     } else{
+    //       res.json({addUserToTattoo: true});
+    //     }
+    //   }
+    // )
 })
 
-// router.get('/tattoowithID', function(req, res){
-//   Tattoo.find(
-//     {_id: req.query.tattoo_id},
-//     function(err, resultat){
-//       res.json(resultat);
-//     }
-//   )
-// })
 
 // Route to update a user favorite tattoos when he dislikes a tattoo
 router.put('/userdisliketattoo', function(req, res) {
@@ -348,7 +341,7 @@ router.put('/userlikeartist', function(req, res) {
     artistNote : req.body.favArtistNote,
     favArtistID : req.body.favArtistID,
   };
-  console.log(newFavoriteArtist);
+  console.log("newFavoriteArtist 352", newFavoriteArtist);
   User.updateOne(
     {_id: req.body.user_id},
     {$addToSet: {userFavoriteArtist: newFavoriteArtist}},
