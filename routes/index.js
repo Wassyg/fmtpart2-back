@@ -272,7 +272,7 @@ router.post('/signin', function(req, res) {
 
 // Route to update user favorite tattoos when he likes a tattoo
 router.put('/userliketattoo', function(req, res) {
-  console.log("req.body 275",req.body);
+  console.log("req.body userliketattoo 275",req.body);
   var newFavoriteTattoo = {
     tattooPhotoLink: req.body.favTattooPhotoLink,
     tattooStyleList: [
@@ -284,30 +284,39 @@ router.put('/userliketattoo', function(req, res) {
     favTattooID: req.body.favTattooID,
     user: req.body.user_id
   };
-  console.log("newFavoriteTattoo 287", newFavoriteTattoo);
+
   User.updateOne(
     {_id: req.body.user_id},
     {$addToSet: {userFavoriteTattoo: newFavoriteTattoo}},
     function (err, raw) {
       if(err){
-        console.log("err 292",err);
         res.json({likeTattoo : false})
       } else{
-        console.log("raw 295",raw);
         res.json({likeTattoo: true});
       }
     });
-    // Tattoo.updateOne(
-    //   {_id: req.body.favTattooID},
-    //   {$addToSet: {user: req.body.user_id}},
-    //   function (err, raw) {
-    //     if(err){
-    //       res.json({addUserToTattoo : false})
-    //     } else{
-    //       res.json({addUserToTattoo: true});
-    //     }
-    //   }
-    // )
+    var newUserLikingTattoo = {
+      userFirstName: req.body.userFirstName,
+      userLastName : req.body.userLastName,
+      userEmail : req.body.userEmail,
+      userPassword : req.body.userPassword,
+      userTelephone : req.body.userTelephone,
+      userTattooDescription : req.body.userTattooDescription,
+      userAvailability : req.body.userAvailability,
+      userFavoriteTattoo : req.body.favTattooID,
+      userFavID:req.body.user_id
+    };
+    Tattoo.updateOne(
+      {_id: req.body.favTattooID},
+      {$addToSet: {user: newUserLikingTattoo}},
+      function (err, raw) {
+        if(err){
+          console.log("err Tattoo update with user information",err);
+        }else{
+          console.log("user added to tattoo");
+        }
+      }
+    )
 })
 
 
@@ -328,6 +337,7 @@ router.put('/userdisliketattoo', function(req, res) {
 
 // Route to update user favorite artists when he likes an artist
 router.put('/userlikeartist', function(req, res) {
+  console.log("req.body userlikeartist 340", req.body);
   var newFavoriteArtist = {
     artistNickname: req.body.favArtistNickname,
     artistCompanyName: req.body.favArtistCompanyName,
@@ -352,7 +362,30 @@ router.put('/userlikeartist', function(req, res) {
         res.json({likeArtist: true});
       }
     }
-  )
+  );
+  var newUserLikingArtist = {
+    userFirstName: req.body.userFirstName,
+    userLastName : req.body.userLastName,
+    userEmail : req.body.userEmail,
+    userPassword : req.body.userPassword,
+    userTelephone : req.body.userTelephone,
+    userTattooDescription : req.body.userTattooDescription,
+    userAvailability : req.body.userAvailability,
+    userFavoriteArtist : req.body.favArtistID,
+    userFavID:req.body.user_id
+  };
+    Artist.updateOne(
+      {_id: req.body.favArtistID},
+      {$addToSet: {user: newUserLikingArtist}},
+      function (err, raw) {
+        if(err){
+          console.log("err Artist update with user information",err);
+        } else{
+          console.log("user added to artist");
+        }
+      }
+    )
+
 });
 
 // Route to update user favorite artists when he dislikes an artist
@@ -376,6 +409,7 @@ router.get('/userFavTattoos', function(req,res){
   Tattoo.find(
     {user: req.query.user_id},
     function(err, tattoo){
+      console.log("resultats recherhce Tattoo Fav 411", tattoo);
       if (err){
         res.json({user : false})
       } else {
@@ -388,9 +422,11 @@ router.get('/userFavTattoos', function(req,res){
   )
 })
 router.get('/userFavArtists', function(req,res){
+  console.log("426", req.query);
   Artist.find(
     {user: req.query.user_id},
     function(err, artist){
+      console.log("user 428 dans recherche Artists Fav", artist);
       if (err){
         res.json({user : false})
       } else {

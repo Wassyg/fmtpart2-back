@@ -148,5 +148,5 @@ async function tattooDBEnrichment() {
 }
 
 ////// TO LAUNCH THE CREATION OF DATABASE : UNCOMMENT THE LINE BELOW /////
-//vérifier sir vraiment besoin de tattooDBCreation() avant !
-// tattooDBEnrichment();
+//vérifier si vraiment besoin de tattooDBCreation() avant !
+//tattooDBEnrichment();
