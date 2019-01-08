@@ -29,17 +29,15 @@ var userSchema = mongoose.Schema({
     },
     userFavoriteTattoo : [
     {
-      tattoo: {
-        type: Schema.Types.ObjectId,
-        ref:'tattoos'
-        }
+            type: Schema.Types.ObjectId,
+            ref:'tattoos'
+
     }],
     userFavoriteArtist : [
       {
-        artist: {
-        type: Schema.Types.ObjectId,
-        ref:'artists'
-        }
+            type: Schema.Types.ObjectId,
+            ref:'artists'
+
     }],
     userFavID: {
       type: String

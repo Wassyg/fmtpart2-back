@@ -273,21 +273,9 @@ router.post('/signin', function(req, res) {
 // Route to update user favorite tattoos when he likes a tattoo
 router.put('/userliketattoo', function(req, res) {
   console.log("req.body userliketattoo 275",req.body);
-  var newFavoriteTattoo = {
-    tattooPhotoLink: req.body.favTattooPhotoLink,
-    tattooStyleList: [
-      req.body.favTattooStyleList1,
-      req.body.favTattooStyleList2,
-      req.body.favTattooStyleList3
-    ],
-    artistID: req.body.favArtistID,
-    favTattooID: req.body.favTattooID,
-    user: req.body.user_id
-  };
-
   User.updateOne(
     {_id: req.body.user_id},
-    {$addToSet: {userFavoriteTattoo: newFavoriteTattoo}},
+    {$addToSet: {userFavoriteTattoo: req.body.favTattooID}},
     function (err, raw) {
       if(err){
         res.json({likeTattoo : false})
@@ -295,20 +283,9 @@ router.put('/userliketattoo', function(req, res) {
         res.json({likeTattoo: true});
       }
     });
-    var newUserLikingTattoo = {
-      userFirstName: req.body.userFirstName,
-      userLastName : req.body.userLastName,
-      userEmail : req.body.userEmail,
-      userPassword : req.body.userPassword,
-      userTelephone : req.body.userTelephone,
-      userTattooDescription : req.body.userTattooDescription,
-      userAvailability : req.body.userAvailability,
-      userFavoriteTattoo : req.body.favTattooID,
-      userFavID:req.body.user_id
-    };
     Tattoo.updateOne(
       {_id: req.body.favTattooID},
-      {$addToSet: {user: newUserLikingTattoo}},
+      {$addToSet: {user: req.body.user_id}},
       function (err, raw) {
         if(err){
           console.log("err Tattoo update with user information",err);
@@ -317,7 +294,8 @@ router.put('/userliketattoo', function(req, res) {
         }
       }
     )
-})
+});
+
 
 
 // Route to update a user favorite tattoos when he dislikes a tattoo
@@ -338,45 +316,21 @@ router.put('/userdisliketattoo', function(req, res) {
 // Route to update user favorite artists when he likes an artist
 router.put('/userlikeartist', function(req, res) {
   console.log("req.body userlikeartist 340", req.body);
-  var newFavoriteArtist = {
-    artistNickname: req.body.favArtistNickname,
-    artistCompanyName: req.body.favArtistCompanyName,
-    artistAddress: req.body.favArtistAddress,
-    artistDescription : req.body.favArtistDescription,
-    artistPhotoLink : req.body.favArtistPhotoLink,
-    artistStyleList : [
-      req.body.favArtistStyleList1,
-      req.body.favArtistStyleList2,
-      req.body.favArtistStyleList3],
-    artistNote : req.body.favArtistNote,
-    favArtistID : req.body.favArtistID,
-  };
-  console.log("newFavoriteArtist 352", newFavoriteArtist);
-  User.updateOne(
-    {_id: req.body.user_id},
-    {$addToSet: {userFavoriteArtist: newFavoriteArtist}},
-    function (err, raw) {
-      if(err){
-        res.json({likeArtist : false})
-      } else{
-        res.json({likeArtist: true});
-      }
-    }
-  );
-  var newUserLikingArtist = {
-    userFirstName: req.body.userFirstName,
-    userLastName : req.body.userLastName,
-    userEmail : req.body.userEmail,
-    userPassword : req.body.userPassword,
-    userTelephone : req.body.userTelephone,
-    userTattooDescription : req.body.userTattooDescription,
-    userAvailability : req.body.userAvailability,
-    userFavoriteArtist : req.body.favArtistID,
-    userFavID:req.body.user_id
-  };
+
+      User.updateOne(
+        {_id: req.body.user_id},
+        {$addToSet: {userFavoriteArtist: req.body.favArtistID}},
+        function (err, raw) {
+          if(err){
+            res.json({likeArtist : false})
+          } else{
+            res.json({likeArtist: true});
+          }
+        }
+      );
     Artist.updateOne(
       {_id: req.body.favArtistID},
-      {$addToSet: {user: newUserLikingArtist}},
+      {$addToSet: {user: req.body.user_id}},
       function (err, raw) {
         if(err){
           console.log("err Artist update with user information",err);
@@ -387,6 +341,16 @@ router.put('/userlikeartist', function(req, res) {
     )
 
 });
+
+// router.get('/tattooToBeChecked', function(req, res) {
+//   Tattoo.find(
+//     {_id: req.query.id},
+//     function(err, tattoo){
+//         res.json({tattoo})
+//     }
+//   )
+// })
+
 
 // Route to update user favorite artists when he dislikes an artist
 router.put('/userdislikeartist', function(req, res) {
@@ -406,38 +370,58 @@ router.put('/userdislikeartist', function(req, res) {
 });
 //Route to get fav tattoos and artists for each users
 router.get('/userFavTattoos', function(req,res){
-  Tattoo.find(
-    {user: req.query.user_id},
-    function(err, tattoo){
-      console.log("resultats recherhce Tattoo Fav 411", tattoo);
+  User.findOne(
+    {_id: req.query.user_id},
+     function(err, user){
       if (err){
         res.json({user : false})
       } else {
-        res.json({
-          user : true,
-          result : tattoo
-        });
+        // chercher tous les éléments dans un array sans boucler grâce au $in
+          Tattoo.find(
+          {_id: {$in: user.userFavoriteTattoo}},
+          function(err, tattoos){
+               if(err){
+                 res.json({err});
+               }else{
+                res.json({
+                  user : true,
+                  result : tattoos
+                  });
+
+              }
+            }
+          );
       }
     }
   )
-})
+});
+
 router.get('/userFavArtists', function(req,res){
-  console.log("426", req.query);
-  Artist.find(
-    {user: req.query.user_id},
-    function(err, artist){
-      console.log("user 428 dans recherche Artists Fav", artist);
+  User.findOne(
+    {_id: req.query.user_id},
+     function(err, user){
       if (err){
         res.json({user : false})
       } else {
-        res.json({
-          user : true,
-          result : artist
-        });
+        // chercher tous les éléments dans un array sans boucler grâce au $in
+          Artist.find(
+          {_id: {$in: user.userFavoriteArtist}},
+          function(err, artist){
+               if(err){
+                 res.json({err});
+               }else{
+                res.json({
+                  user : true,
+                  result : artist
+                  });
+
+              }
+            }
+          );
       }
     }
   )
-})
+});
 
 
 //Route to get all information of a specific user

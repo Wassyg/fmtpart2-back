@@ -51,10 +51,10 @@ var artistSchema = mongoose.Schema({
       type: String
     },
     user:[{
-        user: {
+
           type: Schema.Types.ObjectId,
           ref:'users'
-        }
+        
     }]
 });
 module.exports = Artist = mongoose.model('artists', artistSchema);
