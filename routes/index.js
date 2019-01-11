@@ -302,11 +302,13 @@ router.put('/userliketattoo', function(req, res) {
 router.put('/userdisliketattoo', function(req, res) {
   User.updateOne(
     {_id: req.body.user_id},
-    {$pull: {userFavoriteTattoo: {favTattooID : req.body.favTattooID}}},
+    {$pull: {userFavoriteTattoo: req.body.favTattooID}},
     function (err, raw) {
       if(err){
+        console.log('TATTOO A PAS ETE SUPPRIME');
         res.json({dislikeTattoo : false})
       } else{
+        console.log('TATTOO A BIEN ETE SUPPRIME');
         res.json({dislikeTattoo: true});
       }
     }
@@ -357,12 +359,14 @@ router.put('/userdislikeartist', function(req, res) {
   console.log(req.body);
   User.updateOne(
     {_id: req.body.user_id},
-    {$pull: {userFavoriteArtist: {favArtistID : req.body.favArtistID}}},
+    {$pull: {userFavoriteArtist: req.body.favArtistID}},
     {multi: true},
     function (err, raw) {
       if(err){
         res.json({dislikeArtist : false})
+        console.log('ARTIST A BIEN ETE SUPPRIME');
       } else{
+        console.log('ARTIST A BIEN ETE SUPPRIME');
         res.json({dislikeArtist: true});
       }
     }
@@ -432,7 +436,6 @@ router.get('/user', function(req, res) {
       if (err){
         res.json({user : false})
       } else {
-        console.log(user);
         res.json({
           user : true,
           result : user
