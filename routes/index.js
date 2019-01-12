@@ -305,10 +305,10 @@ router.put('/userdisliketattoo', function(req, res) {
     {$pull: {userFavoriteTattoo: req.body.favTattooID}},
     function (err, raw) {
       if(err){
-        console.log('TATTOO A PAS ETE SUPPRIME');
+        // console.log('TATTOO NA PAS ETE SUPPRIME');
         res.json({dislikeTattoo : false})
       } else{
-        console.log('TATTOO A BIEN ETE SUPPRIME');
+        // console.log('TATTOO A BIEN ETE SUPPRIME');
         res.json({dislikeTattoo: true});
       }
     }
@@ -317,7 +317,7 @@ router.put('/userdisliketattoo', function(req, res) {
 
 // Route to update user favorite artists when he likes an artist
 router.put('/userlikeartist', function(req, res) {
-  console.log("req.body userlikeartist 340", req.body);
+  //console.log("req.body userlikeartist 340", req.body);
 
       User.updateOne(
         {_id: req.body.user_id},
@@ -364,9 +364,9 @@ router.put('/userdislikeartist', function(req, res) {
     function (err, raw) {
       if(err){
         res.json({dislikeArtist : false})
-        console.log('ARTIST A BIEN ETE SUPPRIME');
+        //console.log('ARTIST A BIEN ETE SUPPRIME');
       } else{
-        console.log('ARTIST A BIEN ETE SUPPRIME');
+        //console.log('ARTIST A BIEN ETE SUPPRIME');
         res.json({dislikeArtist: true});
       }
     }

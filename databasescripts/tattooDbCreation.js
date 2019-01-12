@@ -84,7 +84,8 @@ function tattooDBCreation() {
     //Creation of database with local files
     const TattooDBBichon = await tattooDBCreationWithLocalImages('../public/images/tatouagesBichon/', 'Bichon');
     const TattooDBPrincessM = await tattooDBCreationWithLocalImages('../public/images/tatouagesPrincessM/', 'Princess Madness');
-    let TattooDB = TattooDBBichon.concat(TattooDBPrincessM);
+    const TattooDBJulienSamou = await tattooDBCreationWithLocalImages('../public/images/tatouagesJulien/', 'Julien Samou');
+    let TattooDB = TattooDBBichon.concat(TattooDBPrincessM).concat(TattooDBJulienSamou);
     // Creation of database with web files from SCRAPING
     //tattooDBScrapping(tattooLink, TattooDB);
     console.log(TattooDB);
@@ -149,4 +150,4 @@ async function tattooDBEnrichment() {
 
 ////// TO LAUNCH THE CREATION OF DATABASE : UNCOMMENT THE LINE BELOW /////
 //vérifier si vraiment besoin de tattooDBCreation() avant !
-//tattooDBEnrichment();
+tattooDBEnrichment();

@@ -30,7 +30,7 @@ var ArtistDB = [
     artistNickname : "Bichon",
     artistCompanyName : "The Golden Rabbit Tattoo",
     artistAddress: "10 Rue Gambey, 75011 Paris",
-    artistDescription: "Après un passage par le graphisme, Bichon s'est créé son propre style : épuré, fluide et élégant.",
+    artistDescription: "Bichon est un véritable artiste qui a su créer son propre style : épuré, fluide et élégant.",
     artistEmail: "bichontatoueur@gmail.com",
     artistComputerPhotoLink : "../public/avatarsTatoueurs/bichon.jpg",
     artistStyleList : ["DotWork", "FineLine", "BlackWork"],
@@ -44,6 +44,16 @@ var ArtistDB = [
    artistEmail: "princess-madness@hotmail.com",
    artistComputerPhotoLink : "../public/avatarsTatoueurs/princessM.jpg",
    artistStyleList : ["Cartoon", "NewSchool", "Postmodern"],
+   artistNote : 5,
+ },
+ {
+   artistNickname : "Julien Samou",
+   artistCompanyName : "De l'Art ou Du Cochon",
+   artistAddress: "Salon Privé Montmartre, 75018 Paris",
+   artistDescription: "Julien a le graphisme dans l'oeil, ses traits sont droits et ses créations parfaitement équilibrée ",
+   artistEmail: "tattoo.jsamou@gmail.com",
+   artistComputerPhotoLink : "../public/avatarsTatoueurs/julienSamou.jpg",
+   artistStyleList : ["Tribal", "BlackWork", "Berber"],
    artistNote : 5,
  }
 ];
